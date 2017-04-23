@@ -1,0 +1,114 @@
+#!/bin/sh
+#
+# by frank.wang
+# 
+# git@github.com:freedom-diy/autoRemoteSSH.git
+#
+
+
+# Local forwarding port
+localExPort='need_you_config'
+
+# VPN rsakeys path
+vpnPath='need_you_config'
+
+# VPN RSA key
+vpnKey='need_you_config'
+
+# VPN IP4 address
+vpnIP='need_you_config'
+
+# VPN user name
+vpnUser='need_you_config'
+
+# VPN port
+vpnPort='need_you_config'
+
+# Remote server rsakeys path
+remotePath='need_you_config'
+
+# Remote server IP4 address
+remoteIP=''
+
+# Remote server RSA key
+remoteKey=''
+
+# Remote server user name
+remoteUser=''
+
+# Output description
+desc=''
+
+
+# 帮助信息 #
+helpMsg="
+    ssh_yzt: params option \n
+    usage: ssh_yzt [--help] param_1 param_2 \n
+    params description： \n
+    param_1 abbreviation for remote server \n
+    param_2 Local forwarding port \n
+\n
+    abbreviation list:{ \n
+        [111 - development remote server] \n
+        [222 - test remote server] \n
+        [333 - product remote server] \n
+    }\n
+"
+
+
+if [ $# -eq '0' ]
+    then
+    echo 'Require params! Please input: ssh_yzt --help'
+    exit
+elif [ $# -eq '2' ]
+    then
+    localExPort="-D $2"
+else
+    echo "Connecting to remote server ..."
+fi
+
+if [[ $1 != *[^0-9]* ]]&&[[ $1 != 0* ]]
+    then
+    # Remote server's abbreviation mapping list
+    if [ $1 -eq '111' ]
+      then
+      desc='[development remote server]'
+      remoteIP='192.168.0.111'
+      remoteKey='id_rsa-192.168.0.111'
+      remoteUser='user_dev'
+    elif [ $1 -eq '222' ]
+      then
+      desc='[test remote server]'
+      remoteIP='192.168.0.222'
+      remoteKey='id_rsa-192.168.0.222'
+      remoteUser='user_test'
+    elif [ $1 -eq '333' ]
+      then
+      desc='[product remote server]'
+      remoteIP='192.168.0.333'
+      remoteKey='id_rsa-192.168.0.333'
+      remoteUser='user_product'
+    else
+      echo 'Require params! Please input: ssh_yzt --help'
+      exit
+    fi
+else
+    # echo 'param is string'
+    if [ $1 = "--help" ]
+      then
+      echo $helpMsg
+      exit
+    else
+      echo 'Require params! Please input: ssh_yzt --help'
+      exit
+    fi
+fi
+
+
+# 输出自定义描述信息
+echo "connecting to ${desc} ..."
+
+# 执行登录
+ssh -v ${localExPort} -t ${vpnUser}@${vpnIP} -p${vpnPort} -i ${vpnPath}${vpnKey} ssh ${remoteUser}@${remoteIP} -i ${remotePath}${remoteKey}
+
+
