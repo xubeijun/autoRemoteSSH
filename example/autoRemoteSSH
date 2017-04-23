@@ -10,22 +10,22 @@
 localExPort=''
 
 # VPN rsakeys path
-vpnPath='need_you_config'
+vpnPath='/Users/{userName}/Applications/myLocalRsaKeysPath/'
 
 # VPN RSA key
-vpnKey='need_you_config'
+vpnKey='id_rsa'
 
 # VPN IP4 address
-vpnIP='need_you_config'
+vpnIP='192.168.0.1'
 
 # VPN user name
-vpnUser='need_you_config'
+vpnUser='frank.wang'
 
 # VPN port
-vpnPort='need_you_config'
+vpnPort='8090'
 
 # Remote server rsakeys path
-remotePath='need_you_config'
+remotePath='/home/{userName}/.ssh/myRemoteRsaKeysPath/'
 
 # Remote server IP4 address
 remoteIP=''
@@ -49,7 +49,9 @@ helpMsg="
     param_2 Local forwarding port \n
 \n
     abbreviation list:{ \n
-    XXX : XXX example remote server | Need you config
+        [111 - development remote server] \n
+        [222 - test remote server] \n
+        [333 - product remote server] \n
     }\n
 "
 
@@ -72,12 +74,24 @@ fi
 if [[ $1 != *[^0-9]* ]]&&[[ $1 != 0* ]]
     then
     # Remote server's abbreviation mapping list | Need you config
-    if [ $1 -eq 'XXX' ]
+    if [ $1 -eq '111' ]
       then
-      desc='[example remote server]'
-      remoteIP='192.168.0.example'
-      remoteKey='id_rsa-example'
-      remoteUser='user_example'
+      desc='[development remote server]'
+      remoteIP='192.168.0.111'
+      remoteKey='id_rsa-192.168.0.111'
+      remoteUser='user_dev'
+    elif [ $1 -eq '222' ]
+      then
+      desc='[test remote server]'
+      remoteIP='192.168.0.222'
+      remoteKey='id_rsa-192.168.0.222'
+      remoteUser='user_test'
+    elif [ $1 -eq '333' ]
+      then
+      desc='[product remote server]'
+      remoteIP='192.168.0.333'
+      remoteKey='id_rsa-192.168.0.333'
+      remoteUser='user_product'
     else
       echo "${tipsMsg[0]}"
       exit

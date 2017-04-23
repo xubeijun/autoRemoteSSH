@@ -1,43 +1,70 @@
 # autoRemoteSSH
 This bash script help you auto connect to remote SSH server through  your springboard VPN server.
 
+### step 1.
+Please scp your rsa files to your springboard VPN server.
+eg.
+```linux
+# scp folder
+scp -r local_folder remote_username@remote_ip:remote_folder 
 
-#####################################################################
-# 
-#  支持通过VPN登录内网服务器，并转发端口
-#
-#  step 1. 请配置参数: "need_you_config"
-#  step 2. scp rsa文件到VPN跳板机
-#  
-#  ssh_yzt: params option
-#  usage: ssh_yzt [--help] param_1 param_2
-#  参数说明：
-#  param_1 内网机器简写
-#  param_2 本地转发端口
+# scp file
+scp local_file remote_username@remote_ip:remote_folder
+```
 
-#  机器列表{
-#  [156-www测试]
-#  [201-www预发布]
-#  [114-oa测试]
-#  [126-体验]
-#  [69-www发布机]
-#  }
-#####################################################################
-# step 3. 
-# vim ~/.bash_profile
-# 
-# step 4.
-# ```copy code to this file
-# #ssh XXX
-# function ssh_XXX(){
-#   /Users/freedom/Applications/XXX/vpn/myAutoSSH.sh $@
-# }
-# ```
-# 
-# step 5.
-# source ~/.bash_profile
-# 
-# step 6. awesome!
-# ssh_yzt --help
-# 
-#####################################################################
+### step 2.
+Please config the param which is marked as **"need_you_config"**.
+```linux
+vim ./ssh/autoRemoteSSH
+```
+
+Make sure this file have the excute permission.
+```
+chmod -R 744 ./ssh/autoRemoteSSH
+```
+
+Your can see the **./example/autoRemoteSSH**, and see these params which is marked as **"need_you_config"**.
+
+1.  vpnPath
+1.  vpnKey
+1.  vpnIP
+1.  vpnUser
+1.  vpnPort
+1.  remotePath
+1.  helpMsg
+1.  abbreviation mapping list
+
+### step 3. 
+Add this SSH command to your local machine configuration file
+```linux
+vim ~/.bash_profile
+```
+
+ 
+### step 4.
+copy code to bash_profile file
+Please replace the **yourSSHscriptPath** to your real script path
+```bash
+function ssh_remote(){
+   /{yourSSHscriptPath}/autoRemoteSSH.sh $@
+}
+```
+
+### step 5.
+Restart your local machine configuration file
+```linux
+source ~/.bash_profile
+```
+
+### step 6.
+Get the help message in your terminal
+```linux
+ssh_remote --help
+```
+
+### awesome!
+You can enter the sort code to remote SSH server!
+eg.
+```
+ssh_remote 111
+```
